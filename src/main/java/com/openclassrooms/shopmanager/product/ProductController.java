@@ -1,5 +1,7 @@
 package com.openclassrooms.shopmanager.product;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import javax.validation.Valid;
 
 @Controller
 public class ProductController {
+    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
     private ProductService productService;
 
@@ -42,10 +45,7 @@ public class ProductController {
 
     @PostMapping("/admin/product")
     public String createProduct(@Valid @ModelAttribute("productModel") ProductModel productModel, BindingResult result)
-    {
-        //TODO implement form fields validation using the standard annotations in ProductModel cloass
-        // Business constraints for each field is commented against it
-        // Add proper error messages for each error and show all of them at the top of the page
+    { log.warn("Result has errors" + result.hasErrors());
 
         if (!result.hasErrors()) {
             productService.createProduct(productModel);

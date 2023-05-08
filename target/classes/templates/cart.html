@@ -1,0 +1,69 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title th:text="#{cart.title}">Product</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+		
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css' />	
+	<link href='https://fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css' />
+
+  </head>
+
+  <body>
+
+  <div th:replace="fragments :: navbar">Navigation bar fragment</div>
+
+  <div class="container">
+
+    <h1 th:text="#{cart.title}">Product</h1>
+
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th th:text="#{cart.quantity}">Quantity</th>
+        <th th:text="#{cart.item}">Item</th>
+        <th class="text-right" th:text="#{cart.price}">Price</th>
+        <th class="text-right" th:text="#{cart.Subtotal}">Subtotal</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="cartLine : ${cart.cartLineList}">
+
+        <td th:text="${cartLine.quantity}">Quantity</td>
+        <td th:text="${cartLine.product.name}">Name</td>
+        <td  class="text-right" th:text="${cartLine.product.price}">Price</td>
+        <td  class="text-right" th:text="${cartLine.subtotal}">Subtotal</td>
+        <td>
+          <form action="#" th:action="@{/order/removeFromCart}" method="post">
+            <input id="productId" name="productId"  th:value="${cartLine.product.id}" type="hidden"/>
+            <input class="btn btn-primary" type="submit" th:value="#{cart.remove.from}" />
+          </form>
+        </td>
+      </tr>
+
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="3" class="text-right">Total:</td>
+        <td class="text-right" th:text="${cart.totalValue}" >Total</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="text-right">Average:</td>
+        <td class="text-right" th:text="${cart.averageValue}">Average </td>
+      </tr>
+      </tfoot>
+    </table>
+    <div class="text-center">
+      <a class="btn btn-primary" href="/products">Continue Shopping</a>
+      <a class="btn btn-primary" href="/order">Checkout</a>
+    </div>
+      <div th:replace="fragments :: footer">Footer</div>
+  </div>
+
+
+
+  </body>
+
+</html>

@@ -1,13 +1,24 @@
 package com.openclassrooms.shopmanager.product;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
 public class ProductModel {
 
     private Long id;
+    @NotBlank (message = "Name must not be blank")
     private String name;            // Required
     private String description;
     private String details;
-    private String  quantity;       // Required, Integer, Greater than zero
-    private String  price;          // Required, Numeric, Greater than zero
+    @NotBlank (message = "quantity must not be blank and greater than zero")
+    @Digits(integer = 6, fraction = 2)
+    @Min(value = 1)
+    private String quantity;       // Required, Integer, Greater than zero
+    @NotBlank (message = "price must not be blank and greater than 0")
+    @Digits(integer = 6, fraction = 2)
+    @Min(value = 1)
+    private String price;          // Required, Numeric, Greater than zero
 
     public Long getId() {
         return id;

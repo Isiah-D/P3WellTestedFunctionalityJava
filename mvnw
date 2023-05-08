@@ -114,7 +114,11 @@ if $mingw ; then
     M2_HOME="`(cd "$M2_HOME"; pwd)`"
   [ -n "$JAVA_HOME" ] &&
     JAVA_HOME="`(cd "$JAVA_HOME"; pwd)`"
-  # TODO classpath?
+  CLASSPATH=""
+  for i in $(find "$(pwd)/lib" -name "*.jar"); do
+    CLASSPATH="$CLASSPATH:$i"
+  done
+  export CLASSPATH
 fi
 
 if [ -z "$JAVA_HOME" ]; then

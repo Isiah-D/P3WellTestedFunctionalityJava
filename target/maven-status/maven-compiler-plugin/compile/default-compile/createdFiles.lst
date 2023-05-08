@@ -1,0 +1,17 @@
+com\openclassrooms\shopmanager\Application.class
+com\openclassrooms\shopmanager\config\SecurityConfig.class
+com\openclassrooms\shopmanager\product\Product.class
+com\openclassrooms\shopmanager\product\ProductService.class
+com\openclassrooms\shopmanager\order\CartLine.class
+com\openclassrooms\shopmanager\product\ProductRepository.class
+com\openclassrooms\shopmanager\config\ErrorController.class
+com\openclassrooms\shopmanager\product\ProductController.class
+com\openclassrooms\shopmanager\order\OrderLine.class
+com\openclassrooms\shopmanager\config\LocaleConfig.class
+com\openclassrooms\shopmanager\order\OrderService.class
+com\openclassrooms\shopmanager\order\Order.class
+com\openclassrooms\shopmanager\login\LoginController.class
+com\openclassrooms\shopmanager\product\ProductModel.class
+com\openclassrooms\shopmanager\order\OrderController.class
+com\openclassrooms\shopmanager\order\OrderRepository.class
+com\openclassrooms\shopmanager\order\Cart.class
