@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
-    private static final Logger log = LoggerFactory.getLogger(ProductService.class);
+
 
     private ProductRepository productRepository;
 

@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-
+//Try @Springboot test for this controller.
+//Try to create product
 @Controller
 public class ProductController {
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);

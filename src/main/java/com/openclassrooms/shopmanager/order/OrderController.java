@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
+//  SPRINGBOOT TEST for possible integeration test
 @Controller
 public class OrderController {
 

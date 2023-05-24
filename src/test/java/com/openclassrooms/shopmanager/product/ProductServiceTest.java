@@ -1,5 +1,6 @@
 package com.openclassrooms.shopmanager.product;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -8,6 +9,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -29,9 +31,15 @@ public class ProductServiceTest {
     @Mock
     ProductRepository productRepository;
 
+    @Before
+    public void setUp(){
+
+    }
+
     @Test
     public void getAllProducts_DbHasData_allDataReturned(){
 
+        //Arrange
         Product product1 = new Product();
         product1.setId(1L);
         product1.setName("First product");
@@ -42,10 +50,31 @@ public class ProductServiceTest {
 
         when(productRepository.findAll()).thenReturn(Arrays.asList(product1, product2));
 
+        //Act
         List<Product> products = productService.getAllProducts();
 
+        //Assert
         assertEquals(2, products.size());
         assertEquals(1L, products.get(0).getId() , 0);
         assertEquals(2L, products.get(1).getId() , 0);
+    }
+
+    @Test
+    public void getByProductId_DbHasData_returnsOneProduct() {
+
+        //Arrange
+        Long productId = 1L;
+        Product expectedProduct = new Product();
+        expectedProduct.setId(productId);
+        expectedProduct.setName("Test Product");
+        expectedProduct.setPrice(100.0);
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(expectedProduct));
+
+        //Act
+        Product actualProduct = productService.getByProductId(productId);
+
+        //Assert
+        assertEquals(expectedProduct, actualProduct);
     }
 }
