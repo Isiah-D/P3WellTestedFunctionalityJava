@@ -7,12 +7,16 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -33,16 +37,6 @@ public class ProductControllerTest {
     @MockBean
     private ProductService productService;
 
-//    private ProductService mockProductService;
-//    private ProductController productController;
-//    private ProductModel mockModel;
-
-//    @Before
-//    public void setUp(){
-//        mockProductService = mock(ProductService.class);
-//        mockModel = mock(ProductModel.class);
-//        productController = new ProductController(mockProductService);
-//    }
 //FIXME authentication
     @Test
     public void greetingShouldReturnMessageFromService() throws Exception {
@@ -57,6 +51,24 @@ public class ProductControllerTest {
                 .andExpect(view().name("product"))
                 .andExpect(model().hasErrors());
 
+
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "password", roles = {"ADMIN"})
+    public void testGetProducts() throws Exception {
+        //Arrange
+        ProductModel testProduct = new ProductModel();
+        when(productService.getAllProducts()).thenReturn((List<Product>) Collections.singletonList(testProduct));
+
+        //Act
+        this.mockMvc.perform(get("/products"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("products"))
+                .andExpect(model().attributeExists("products"));
+
+        //Verify
+        verify(productService, times(1)).getAllProducts();
 
     }
 
