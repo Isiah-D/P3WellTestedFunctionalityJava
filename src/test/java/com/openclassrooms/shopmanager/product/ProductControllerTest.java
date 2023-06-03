@@ -12,6 +12,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
@@ -37,7 +38,7 @@ public class ProductControllerTest {
     @MockBean
     private ProductService productService;
 
-//FIXME authentication
+    //FIXME authentication
     @Test
     public void greetingShouldReturnMessageFromService() throws Exception {
         ProductModel testProduct = new ProductModel();
@@ -58,8 +59,8 @@ public class ProductControllerTest {
     @WithMockUser(username = "admin", password = "password", roles = {"ADMIN"})
     public void testGetProducts() throws Exception {
         //Arrange
-        ProductModel testProduct = new ProductModel();
-        when(productService.getAllProducts()).thenReturn((List<Product>) Collections.singletonList(testProduct));
+        Product testProduct = new Product();
+        when(productService.getAllProducts()).thenReturn(Collections.singletonList(testProduct));
 
         //Act
         this.mockMvc.perform(get("/products"))
@@ -71,19 +72,5 @@ public class ProductControllerTest {
         verify(productService, times(1)).getAllProducts();
 
     }
-
-//    @Test
-//    public void testGetProducts() {
-//        // Arrange
-//        List<Product> expectedProducts = Arrays.asList(new Product(), new Product());
-//        when(mockProductService.getAllProducts()).thenReturn(expectedProducts);
-//
-//        // Act
-//        String viewName = productController.getProducts(mockModel);
-//
-//        // Assert
-//        verify(mockProductService, times(1)).getAllProducts();
-//        assertEquals("products", viewName);
-//    }
 
 }

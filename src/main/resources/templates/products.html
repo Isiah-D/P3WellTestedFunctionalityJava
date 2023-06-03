@@ -16,11 +16,11 @@
 
   <div class="container">
       <h1 th:text="#{products.title}">Products</h1>
-      <div class="text-danger validation-summary-valid" th:if="${#fields.hasAnyErrors()}">
-          <ul>
-              <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
-          </ul>
-      </div>
+<!--      <div class="text-danger validation-summary-valid" th:if="${#fields.hasAnyErrors()}">-->
+<!--          <ul>-->
+<!--              <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />-->
+<!--          </ul>-->
+<!--      </div>-->
       <table class="table table-bordered table-striped">
           <tr>
             <th th:text="#{product.name}">Product</th>

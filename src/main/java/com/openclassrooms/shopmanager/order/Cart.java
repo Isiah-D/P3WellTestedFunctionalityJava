@@ -67,9 +67,6 @@ public class Cart {
      */
     public double getAverageValue()
     {
-        // TODO implement the method
-//        return 0.0;
-
         int totalQuantity = getCartLineList().stream().mapToInt(CartLine::getQuantity).sum();
 
         if (totalQuantity > 0) {
