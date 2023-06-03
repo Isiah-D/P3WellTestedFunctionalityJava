@@ -1,8 +1,11 @@
 package com.openclassrooms.shopmanager.product;
 
+import com.openclassrooms.shopmanager.order.Cart;
+import com.openclassrooms.shopmanager.order.CartLine;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -17,7 +20,7 @@ import static org.mockito.Mockito.*;
 /**
  * Take this test method as a template to write your test methods for ProductService and OrderService.
  * A test method must check if a definite method does its job:
- *
+ * <p>
  * Naming follows this popular convention : http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html
  */
 
@@ -32,12 +35,12 @@ public class ProductServiceTest {
     ProductRepository productRepository;
 
     @Before
-    public void setUp(){
+    public void setUp() {
 
     }
 
     @Test
-    public void getAllProducts_DbHasData_allDataReturned(){
+    public void getAllProducts_DbHasData_allDataReturned() {
 
         //Arrange
         Product product1 = new Product();
@@ -55,8 +58,8 @@ public class ProductServiceTest {
 
         //Assert
         assertEquals(2, products.size());
-        assertEquals(1L, products.get(0).getId() , 0);
-        assertEquals(2L, products.get(1).getId() , 0);
+        assertEquals(1L, products.get(0).getId(), 0);
+        assertEquals(2L, products.get(1).getId(), 0);
     }
 
     @Test
@@ -90,40 +93,51 @@ public class ProductServiceTest {
         product2.setId(2L);
         product2.setName("Admin Product2");
 
-        when(productRepository.findAll()).thenReturn(Arrays.asList(product1, product2));
+        when(productRepository.findAllByOrderByIdDesc()).thenReturn(Arrays.asList(product1, product2));
 
         //Act
         List<Product> products = productService.getAllAdminProducts();
 
         //Assert
         assertEquals(2, products.size());
-        assertEquals(1L, products.get(0).getId() , 0);
-        assertEquals(2L, products.get(1).getId() , 0);
+        assertEquals(1L, products.get(0).getId(), 0);
+        assertEquals(2L, products.get(1).getId(), 0);
     }
 
 
     @Test
     public void createProduct_ValidProduct_newProductCreated() {
         //Arrange
-        ProductModel newProduct = new Product();
+        ProductModel newProduct = new ProductModel();
         newProduct.setId(1L);
         newProduct.setName("New Product");
-        newProduct.setPrice(100.0);
+        newProduct.setPrice("100.00");
+        newProduct.setQuantity("1");
+        Product product = new Product();
+        product.setId(newProduct.getId());
+        product.setName(newProduct.getName());
+        product.setQuantity(Integer.parseInt(newProduct.getQuantity()));
+        product.setPrice(Double.parseDouble(newProduct.getPrice()));
+        ArgumentCaptor<Product> argumentCaptor = ArgumentCaptor.forClass(Product.class);
 
-        when(productRepository.save(newProduct)).thenReturn(newProduct);
 
         //Act
-        Product createdProduct = productService.createProduct(newProduct);
+        productService.createProduct(newProduct);
 
         //Assert
-        assertEquals(newProduct, createdProduct);
+        verify(productRepository).save(argumentCaptor.capture());
+        Product actual = argumentCaptor.getValue();
+        assertEquals(product.getName(), actual.getName());
+        assertEquals(product.getPrice(), actual.getPrice(), 0);
+        assertEquals(product.getQuantity(), actual.getQuantity());
+
     }
 
     @Test
     public void deleteProduct_DbHasData_productDeleted() {
         //Arrange
         Long productId = 1L;
-        doNothing().when(productRepository.deleteById(productId));
+        doNothing().when(productRepository).deleteById(productId);
 
         //Act
         productService.deleteProduct(productId);
@@ -142,19 +156,23 @@ public class ProductServiceTest {
         productToUpdate.setPrice(100.0);
         productToUpdate.setQuantity(10);
 
-        Product updatedProduct = new Product();
-        updatedProduct.setId(productId);
-        updatedProduct.setName("Product");
-        updatedProduct.setPrice(100.0);
-        updatedProduct.setQuantity(5);
+        // Create a cartLine with a quantity that is less than the product's quantity.
+        CartLine cartLine = new CartLine();
+        cartLine.setProduct(productToUpdate);
+        cartLine.setQuantity(5);
+
+        Cart cart = new Cart();
+        cart.addItem(productToUpdate, cartLine.getQuantity());
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(productToUpdate));
-        when(productRepository.save(updatedProduct)).thenReturn(updatedProduct);
+        ArgumentCaptor<Product> argumentCaptor = ArgumentCaptor.forClass(Product.class);
 
         //Act
-        productService.updateProductQuantities(updatedProduct);
+        productService.updateProductQuantities(cart);
 
         //Assert
-        assertEquals(updatedProduct.getQuantity(), productToUpdate.getQuantity());
+        verify(productRepository).save(argumentCaptor.capture());
+        Product savedProduct = argumentCaptor.getValue();
+        assertEquals(5, savedProduct.getQuantity());
     }
 }

@@ -18,42 +18,47 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ProductController.class)
-@ContextConfiguration(classes = {ProductService.class})
+//@ContextConfiguration(classes = {ProductService.class})
 public class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductRepository productRepository;
+    private ProductService productService;
 
-    private ProductService mockProductService;
-    private ProductController productController;
-    private ProductModel mockModel;
+//    private ProductService mockProductService;
+//    private ProductController productController;
+//    private ProductModel mockModel;
 
-    @Before
-    public void setUp(){
-        mockProductService = mock(ProductService.class);
-        mockModel = mock(ProductModel.class);
-        productController = new ProductController(mockProductService);
-    }
-//FIXME authentication
-//    @Test
-//    public void greetingShouldReturnMessageFromService() throws Exception {
-//        ProductModel testProduct = new ProductModel();
-//        ProductService mockService = mock(ProductService.class);
-//        doNothing().when(mockService).createProduct(testProduct);
-//        this.mockMvc.perform(post("/admin/product"))
-//                .andDo(print()).andExpect(status().isOk())
-//                .andExpect(content().string(containsString("Hello, Mock")));
+//    @Before
+//    public void setUp(){
+//        mockProductService = mock(ProductService.class);
+//        mockModel = mock(ProductModel.class);
+//        productController = new ProductController(mockProductService);
 //    }
+//FIXME authentication
+    @Test
+    public void greetingShouldReturnMessageFromService() throws Exception {
+        ProductModel testProduct = new ProductModel();
+        ProductService mockService = mock(ProductService.class);
+        doNothing().when(mockService).createProduct(testProduct);
+        this.mockMvc.perform(post("/admin/product")
+                .with(user("admin").password("password").roles("ADMIN"))
+                .with(csrf())
+                .flashAttr("productModel", testProduct))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(view().name("product"))
+                .andExpect(model().hasErrors());
+
+
+    }
 
 //    @Test
 //    public void testGetProducts() {
