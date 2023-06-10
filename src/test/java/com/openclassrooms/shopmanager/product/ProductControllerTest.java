@@ -70,7 +70,22 @@ public class ProductControllerTest {
 
         //Verify
         verify(productService, times(1)).getAllProducts();
-
     }
 
+    @Test
+    @WithMockUser(username = "admin", password = "password", roles = {"ADMIN"})
+    public void testGetAdminProducts() throws Exception {
+        //Arrange
+        Product testProduct = new Product();
+        when(productService.getAllAdminProducts()).thenReturn(Collections.singletonList(testProduct));
+
+        //Act
+        this.mockMvc.perform(get("/admin/products"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("productsAdmin"))
+                .andExpect(model().attributeExists("products"));
+
+        //Verify
+        verify(productService, times(1)).getAllAdminProducts();
+    }
 }
