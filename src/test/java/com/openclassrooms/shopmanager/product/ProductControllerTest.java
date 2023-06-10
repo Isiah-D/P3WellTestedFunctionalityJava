@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -88,4 +89,26 @@ public class ProductControllerTest {
         //Verify
         verify(productService, times(1)).getAllAdminProducts();
     }
+
+    @Test
+    @WithMockUser(username = "admin", password = "password", roles = {"ADMIN"})
+    public void testDeleteProduct() throws Exception {
+        //Arrange
+        Long delProductId = 1L;
+        doNothing().when(productService).deleteProduct(delProductId);
+        when(productService.getAllAdminProducts()).thenReturn(new ArrayList<>());
+
+        //Act
+        this.mockMvc.perform(post("/admin/deleteProduct")
+                .with(csrf())
+                .param("delProductId", delProductId.toString()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("productsAdmin"))
+                .andExpect(model().attributeExists("products"));
+
+        //Verify
+        verify(productService, times(1)).deleteProduct(delProductId);
+    }
+
+
 }
