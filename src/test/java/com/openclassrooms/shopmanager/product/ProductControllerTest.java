@@ -110,5 +110,14 @@ public class ProductControllerTest {
         verify(productService, times(1)).deleteProduct(delProductId);
     }
 
+    @Test
+    @WithMockUser(username = "admin", password = "password", roles = {"ADMIN"})
+    public void testProductForm() throws Exception {
+        //Act
+        this.mockMvc.perform(get("/admin/product"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("product"))
+                .andExpect(model().attributeExists("product"));
+    }
 
 }
