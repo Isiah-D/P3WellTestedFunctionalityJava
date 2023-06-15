@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -16,6 +17,8 @@ import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -61,5 +64,22 @@ public class ProductControllerIT {
 
         // And the view should be the product form view
         assertTrue(response.getBody().contains("<title>Product Form</title>"));  // assuming this title in your product form view
+    }
+
+    @Test
+    public void testCreateProduct() {
+        // Given a product to create
+        ProductModel productModel = new ProductModel();
+        productModel.setName("Test Product");
+
+        // When we POST to the /admin/product endpoint
+        HttpEntity<ProductModel> request = new HttpEntity<>(productModel);
+        ResponseEntity<String> response = restTemplate.postForEntity("/admin/product", request, String.class);
+
+        // Then the status code should be 200 OK
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        // And the service method should have been called
+        verify(productService).createProduct(any(ProductModel.class));
     }
 }

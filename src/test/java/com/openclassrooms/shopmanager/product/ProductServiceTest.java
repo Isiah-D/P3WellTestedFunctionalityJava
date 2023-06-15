@@ -175,4 +175,32 @@ public class ProductServiceTest {
         Product savedProduct = argumentCaptor.getValue();
         assertEquals(5, savedProduct.getQuantity());
     }
+
+    @Test
+    public void updateProductQuantities_QuantityBecomesZero_productDeleted() {
+        //Arrange
+        Long productId = 1L;
+        Product productToUpdate = new Product();
+        productToUpdate.setId(productId);
+        productToUpdate.setName("Product");
+        productToUpdate.setPrice(100.0);
+        productToUpdate.setQuantity(10);
+
+        // Create a cartLine with a quantity that is equal to the product's quantity.
+        CartLine cartLine = new CartLine();
+        cartLine.setProduct(productToUpdate);
+        cartLine.setQuantity(10);
+
+        Cart cart = new Cart();
+        cart.addItem(productToUpdate, cartLine.getQuantity());
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(productToUpdate));
+
+        //Act
+        productService.updateProductQuantities(cart);
+
+        //Assert
+        verify(productRepository).delete(productToUpdate);
+    }
+
 }
