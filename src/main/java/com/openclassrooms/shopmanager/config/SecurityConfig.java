@@ -34,11 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder authBuilder) throws Exception {
-//        authBuilder
-//                .inMemoryAuthentication()
-//                .withUser(User.withDefaultPasswordEncoder().username("admin").password("password").roles("ADMIN"));
-//    }
+    @Override
+    protected void configure(AuthenticationManagerBuilder authBuilder) throws Exception {
+        authBuilder
+                .inMemoryAuthentication()
+                .withUser(User.withDefaultPasswordEncoder().username("admin").password("password").roles("ADMIN"));
+    }
 
 }

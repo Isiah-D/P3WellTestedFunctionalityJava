@@ -119,5 +119,4 @@ public class ProductControllerTest {
                 .andExpect(view().name("product"))
                 .andExpect(model().attributeExists("product"));
     }
-
 }
