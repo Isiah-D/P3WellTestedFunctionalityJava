@@ -119,4 +119,38 @@ public class ProductControllerTest {
                 .andExpect(view().name("product"))
                 .andExpect(model().attributeExists("product"));
     }
+
+    @Test
+    @WithMockUser(username = "admin", password = "password", roles = {"ADMIN"})
+    public void createProduct_NoErrors_RedirectToAdminProducts() throws Exception {
+        // Arrange
+        ProductModel productModel = new ProductModel();
+        productModel.setName("Product");
+        productModel.setPrice("10.0");
+        productModel.setQuantity("1");
+
+        doNothing().when(productService).createProduct(any(ProductModel.class));
+
+        // Act and Assert
+        mockMvc.perform(post("/admin/product")
+                .with(csrf())
+                .flashAttr("product", productModel))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/admin/products"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "password", roles = {"ADMIN"})
+    public void createProduct_HasErrors_ReturnsToProductPage() throws Exception {
+        // Arrange
+        ProductModel productModel = new ProductModel();
+        productModel.setName(""); // name is empty which would trigger a validation error
+
+        // Act and Assert
+        mockMvc.perform(post("/admin/product")
+                .with(csrf())
+                .flashAttr("product", productModel))
+                .andExpect(status().isOk())
+                .andExpect(view().name("product"));
+    }
 }
