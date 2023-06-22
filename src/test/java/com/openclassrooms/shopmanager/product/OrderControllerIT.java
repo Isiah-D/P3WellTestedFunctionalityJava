@@ -36,6 +36,7 @@ public class OrderControllerIT {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        orderController = new OrderController(orderService);
     }
 
     @Test
@@ -62,5 +63,31 @@ public class OrderControllerIT {
 
         // Assert
         assertEquals("redirect:/order/cart", redirectUrl);
+    }
+
+    @Test
+    public void testAddToCart_Failure() {
+        // Arrange
+        Long productId = 456L;
+        when(orderService.addToCart(productId)).thenReturn(false);
+
+        // Act
+        String redirectUrl = orderController.addToCart(productId);
+
+        // Assert
+        assertEquals("redirect:/products", redirectUrl);
+    }
+
+    @Test
+    public void testRemoveFromCart() {
+        // Arrange
+        Long productId = 123L;
+
+        // Act
+        String redirectUrl = orderController.removeFromCart(productId);
+
+        // Assert
+        assertEquals("redirect:/order/cart", redirectUrl);
+        verify(orderService).removeFromCart(productId);
     }
 }
