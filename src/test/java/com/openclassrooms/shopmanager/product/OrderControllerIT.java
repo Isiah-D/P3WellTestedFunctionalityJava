@@ -33,6 +33,11 @@ public class OrderControllerIT {
     @Mock
     private BindingResult bindingResult;
 
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
     @Test
     public void testGetCart() {
         // Arrange
@@ -46,5 +51,16 @@ public class OrderControllerIT {
         verify(model).addAttribute(eq("cart"), any(Cart.class));
     }
 
+    @Test
+    public void testAddToCart_Success() {
+        // Arrange
+        Long productId = 123L;
+        when(orderService.addToCart(productId)).thenReturn(true);
 
+        // Act
+        String redirectUrl = orderController.addToCart(productId);
+
+        // Assert
+        assertEquals("redirect:/order/cart", redirectUrl);
+    }
 }

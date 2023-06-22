@@ -35,7 +35,9 @@ public class ProductService {
     }
 
     public Product getByProductId(Long productId){
-        return productRepository.findById(productId).get();
+        if(productRepository.findById(productId).isPresent()) {
+            return productRepository.findById(productId).get();
+        } else return null;
     }
 
     public void createProduct(ProductModel productModel){
