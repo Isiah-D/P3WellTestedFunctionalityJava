@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+
 //Try @Springboot test for this controller.
 //Try to create product
 @Controller
@@ -25,7 +26,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping( value = {"/products" , "/"})
+    @GetMapping(value = {"/products", "/"})
     public String getProducts(Model model) {
         model.addAttribute("products", productService.getAllProducts());
         return "products";
@@ -40,13 +41,13 @@ public class ProductController {
 
     @GetMapping("/admin/product")
     public String productForm(Model model) {
-        model.addAttribute("product",new ProductModel());
+        model.addAttribute("product", new ProductModel());
         return "product";
     }
 
     @PostMapping("/admin/product")
-    public String createProduct(@Valid @ModelAttribute("product") ProductModel productModel, BindingResult result)
-    { log.warn("Result has errors" + result.hasErrors());
+    public String createProduct(@Valid @ModelAttribute("product") ProductModel productModel, BindingResult result) {
+        log.warn("Result has errors" + result.hasErrors());
 
         if (!result.hasErrors()) {
             productService.createProduct(productModel);
@@ -57,8 +58,7 @@ public class ProductController {
     }
 
     @PostMapping("/admin/deleteProduct")
-    public String deleteProduct(@RequestParam("delProductId") Long delProductId,Model model)
-    {
+    public String deleteProduct(@RequestParam("delProductId") Long delProductId, Model model) {
         productService.deleteProduct(delProductId);
         model.addAttribute("products", productService.getAllAdminProducts());
 

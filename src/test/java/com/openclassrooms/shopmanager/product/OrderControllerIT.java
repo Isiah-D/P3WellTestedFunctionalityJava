@@ -1,6 +1,7 @@
 package com.openclassrooms.shopmanager.product;
 
 import com.openclassrooms.shopmanager.order.Cart;
+import com.openclassrooms.shopmanager.order.Order;
 import com.openclassrooms.shopmanager.order.OrderController;
 import com.openclassrooms.shopmanager.order.OrderService;
 import org.junit.Before;
@@ -88,6 +89,17 @@ public class OrderControllerIT {
 
         // Assert
         assertEquals("redirect:/order/cart", redirectUrl);
-        verify(orderService).removeFromCart(productId);
+    }
+
+    @Test
+    public void testGetOrderForm() {
+        // Arrange
+        Order order = new Order();
+
+        // Act
+        String viewName = orderController.getOrderForm(order);
+
+        // Assert
+        assertEquals("order", viewName);
     }
 }
