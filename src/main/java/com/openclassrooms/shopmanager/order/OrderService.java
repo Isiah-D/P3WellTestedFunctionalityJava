@@ -66,7 +66,7 @@ public class OrderService {
         for (CartLine cartLine : cartLines) {
             Product product = productService.getByProductId(cartLine.getProduct().getId());
             if (product.getQuantity() < cartLine.getQuantity()) {
-                removeFromCart(cartLines.);
+                removeFromCart(product.getId());
                 throw new IllegalArgumentException("Insufficient stock for product with ID: " + product.getId());
             }
         }
