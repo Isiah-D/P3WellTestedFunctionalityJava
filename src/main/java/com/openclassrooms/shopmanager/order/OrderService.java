@@ -26,7 +26,7 @@ public class OrderService {
 
     public boolean addToCart(Long productId) {
         Product product = productService.getByProductId(productId);
-        if (product != null) {
+        if (product != null && product.getQuantity() > 0) {
             cart.addItem(product, 1);
             return true;
         }
@@ -66,6 +66,7 @@ public class OrderService {
         for (CartLine cartLine : cartLines) {
             Product product = productService.getByProductId(cartLine.getProduct().getId());
             if (product.getQuantity() < cartLine.getQuantity()) {
+                removeFromCart(cartLines.);
                 throw new IllegalArgumentException("Insufficient stock for product with ID: " + product.getId());
             }
         }

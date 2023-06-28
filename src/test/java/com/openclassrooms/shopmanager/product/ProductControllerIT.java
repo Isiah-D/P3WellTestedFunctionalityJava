@@ -64,7 +64,7 @@ public class ProductControllerIT {
     }
 
     @Test
-    public void testCreateProduct() {
+    public void testCreateProduct() throws Exception {
         // Given a product to create
         ProductModel productModel = new ProductModel();
         productModel.setName("Test Product");

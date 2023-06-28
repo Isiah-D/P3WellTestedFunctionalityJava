@@ -49,9 +49,6 @@ public class ProductService {
     }
 
     public void deleteProduct(Long productId) {
-        // TODO what happens if a product has been added to a cart and has been later removed from the inventory ?
-        // delete the product form the cart by using the specific method
-        // => the choice is up to the student
         productRepository.deleteById(productId);
     }
 
