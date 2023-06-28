@@ -11,28 +11,27 @@ public class Cart {
     private List<CartLine> cartLineList = new ArrayList<>();
 
     /**
-     *
      * @return the actual cartline list
      */
     public List<CartLine> getCartLineList() {
-//        return new ArrayList<>();
         // TO REMOVE
         return cartLineList;
     }
 
     /**
      * Adds a getProductById in the cart or increment its quantity in the cart if already added
-     * @param product getProductById to be added
+     *
+     * @param product  getProductById to be added
      * @param quantity the quantity
      */
     public void addItem(Product product, int quantity) {
 
         Optional<CartLine> cartLine = cartLineList.stream().filter(cl -> cl.getProduct().equals(product)).findFirst();
 
-        if (cartLine.isPresent()){
+        if (cartLine.isPresent()) {
             cartLine.get().setQuantity(cartLine.get().getQuantity() + quantity);
 
-        }else {
+        } else {
             CartLine newCartLine = new CartLine();
             newCartLine.setQuantity(quantity);
             newCartLine.setProduct(product);
@@ -42,6 +41,7 @@ public class Cart {
 
     /**
      * Removes a getProductById form the cart
+     *
      * @param product the getProductById to be removed
      */
     public void removeLine(Product product) {
@@ -52,24 +52,14 @@ public class Cart {
     /**
      * @return total value of a cart
      */
-    public double getTotalValue()
-    {
-        // TODO implement the method
-//        return 0.0;
-
-        // To REMOVE
+    public double getTotalValue() {
         return getCartLineList().stream().mapToDouble(CartLine::getSubtotal).sum();
-
     }
 
     /**
      * @return Get average value of a cart
      */
-    public double getAverageValue()
-    {
-        // TODO implement the method
-//        return 0.0;
-
+    public double getAverageValue() {
         int totalQuantity = getCartLineList().stream().mapToInt(CartLine::getQuantity).sum();
 
         if (totalQuantity > 0) {
@@ -83,30 +73,22 @@ public class Cart {
      * @param productId the getProductById id to search for
      * @return getProductById in the cart if it finds it
      */
-    public Product findProductInCartLines(Long productId)
-    {
-        // TODO implement the method
-//        return null;
-
-        // TO REMOVE
-       return cartLineList.stream().filter(cl -> cl.getProduct().getId().equals(productId)).findFirst().get().getProduct();
+    public Product findProductInCartLines(Long productId) {
+        return cartLineList.stream().filter(cl -> cl.getProduct().getId().equals(productId)).findFirst().get().getProduct();
     }
 
     /**
-     *
      * @param index index of the cartLine
      * @return CartLine in that index
      */
-    public CartLine getCartLineByIndex(int index)
-    {
+    public CartLine getCartLineByIndex(int index) {
         return getCartLineList().get(index);
     }
 
     /**
      * Clears a the cart of all added products
      */
-    public void clear()
-    {
+    public void clear() {
         List<CartLine> cartLines = getCartLineList();
         cartLines.clear();
     }
